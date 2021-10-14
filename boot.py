@@ -9,13 +9,13 @@
 # Source: https://docs.micropython.org/en/latest/library/network.WLAN.html
 #
 # Files required to run this script:
-#     boot.py (boot_with_wifi.py)
+#     boot.py
 #     key_store.py
 #
 # Optional files:
-#     soft_wdt.py
 #     detect_filesystem.py
 #     TinyPICO_RGB.py
+#     wget https://github.com/peterhinch/micropython-samples/raw/master/soft_wdt/soft_wdt.py
 #
 # Usage:
 #     $ pip3 install --user mpfshell
@@ -189,7 +189,7 @@ except KeyboardInterrupt:
 except:
     print('ERROR... Resetting Device')
     led('red')
-    #utime.sleep(3)  # A chance to hit Ctrl+C in REPL
+    utime.sleep(2)  # A chance to hit Ctrl+C in REPL
     reset()
 
 print('boot.py: end of script')
