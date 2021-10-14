@@ -37,7 +37,7 @@
 
 print()
 print('=' * 45)
-print('boot.py: Press CTRL+C to drop to REPL...')
+print('boot.py: Press CTRL+C to enter REPL...')
 print()
 import utime
 utime.sleep(2)  # A chance to hit Ctrl+C in REPL
