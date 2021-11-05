@@ -12,7 +12,7 @@
 #
 # Usage:
 #   import time
-#   from timezone import tz
+#   from timezone import tz, isDST
 #   time.localtime(tz())
 #
 
@@ -31,3 +31,6 @@ def tz(format='time'):
         return False if t < start or t > end else True
     else:
         return None
+
+def isDST():
+    return tz(format='bool')
