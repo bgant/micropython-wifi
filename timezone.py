@@ -20,7 +20,8 @@ UTC_Offset_ST  = -6  # CST
 UTC_Offset_DST = -5  # CDT
 
 import time
-def tz(t = time.time(), format='time'):
+def tz(format='time'):
+    t = time.time()
     year = time.localtime(t)[0]
     start = time.mktime((year, 3,(14-(int(5*year/4+1))%7),2,0,0,0,0))  # 2AM the Second Sunday in March
     end   = time.mktime((year,11,( 7-(int(5*year/4+1))%7),2,0,0,0,0))  # 2AM the  First Sunday in November
@@ -31,5 +32,5 @@ def tz(t = time.time(), format='time'):
     else:
         return None
 
-def isDST(t = time.time()):
-    return tz(t, format='bool')
+def isDST():
+    return tz(format='bool')
