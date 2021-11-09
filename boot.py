@@ -2,7 +2,7 @@
 #
 # Brandon Gant
 # Created: 2019-02-08
-# Updated: 2021-10-13
+# Updated: 2021-11-09
 #
 # Source: https://github.com/micropython/micropython/tree/master/ports/esp32#configuring-the-wifi-and-using-the-board
 # Source: https://boneskull.com/micropython-on-esp32-part-1/
@@ -15,7 +15,6 @@
 # Optional files:
 #     detect_filesystem.py
 #     TinyPICO_RGB.py
-#     wget https://github.com/peterhinch/micropython-samples/raw/master/soft_wdt/soft_wdt.py
 #
 # Usage:
 #     $ pip3 install --user mpfshell
@@ -23,7 +22,6 @@
 #     mpfs [/]> open ttyUSB0
 #     mpfs [/]> put boot_with_wifi.py boot.py
 #     mpfs [/]> put key_store.py
-#     mpfs [/]> put soft_wdt.py
 #     mpfs [/]> put detect_filesystem.py
 #     mpfs [/]> repl
 #     >>>  <Ctrl+] to exit repl>
@@ -42,20 +40,15 @@ print()
 import utime
 utime.sleep(2)  # A chance to hit Ctrl+C in REPL
 
-try:
-    from soft_wdt import wdt_feed, WDT_CANCEL  # Initialize Watchdog Timer
-    wdt_feed(120)  # boot.py script has 2 minutes to complete before Watchdog timer resets device
-except:
-    print('soft_wdt.py module is not present')
-    pass  # still works if soft_wdt.py is missing 
-
-from machine import reset
+from machine import reset, WDT
 from sys import exit
 from uos import uname
 
 # Create exceptions (feedback) in cases where normal RAM allocation fails (e.g. interrupts)
 from micropython import alloc_emergency_exception_buf
 alloc_emergency_exception_buf(100)
+
+wdt = WDT(timeout=300000)  # 5-minutes for boot.py to finish and move to main.py / wdt.feed() to reset timer
 
 if 'TinyPICO' in uname().machine:
     try:
@@ -91,10 +84,6 @@ try:
     if not ssid_name:
         key_store.init()
 except:
-    try:
-        wdt_feed(WDT_CANCEL)
-    except:
-        pass
     key_store.init()
     reset()
 
@@ -180,10 +169,7 @@ try:
     #filesystem()  # Detect FAT or littlefs filesystem
     list_files()
 except KeyboardInterrupt:
-    try:
-        wdt_feed(WDT_CANCEL)  # Cancel/Disable Watchdog Timer when Ctrl+C pressed
-    except:
-        pass
+    wdt = WDT(timeout=86400000)  # Watchdog Timer cannot be disabled, so set to expire in 1 day
     led('off')
     exit()
 except:
@@ -192,12 +178,7 @@ except:
     utime.sleep(2)  # A chance to hit Ctrl+C in REPL
     reset()
 
+wdt.feed() 
 print('boot.py: end of script')
 print('=' * 45)
 print()
-
-# Disable boot.py watchdog timer
-try:
-    wdt_feed(WDT_CANCEL)
-except:
-    pass
