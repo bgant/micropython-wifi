@@ -1,37 +1,51 @@
-# MicroPython: https://docs.micropython.org/en/latest/
-#
-# Brandon Gant
-# Created: 2019-02-08
-# Updated: 2021-11-09
-#
-# Source: https://github.com/micropython/micropython/tree/master/ports/esp32#configuring-the-wifi-and-using-the-board
-# Source: https://boneskull.com/micropython-on-esp32-part-1/
-# Source: https://docs.micropython.org/en/latest/library/network.WLAN.html
-#
-# Files required to run this script:
-#     boot.py
-#     key_store.py
-#
-# Optional files:
-#     detect_filesystem.py
-#     TinyPICO_RGB.py
-#
-# Usage:
-#     $ pip3 install --user mpfshell
-#     $ mpfshell
-#     mpfs [/]> open ttyUSB0
-#     mpfs [/]> put boot_with_wifi.py boot.py
-#     mpfs [/]> put key_store.py
-#     mpfs [/]> put detect_filesystem.py
-#     mpfs [/]> repl
-#     >>>  <Ctrl+] to exit repl>
-#
-# --OR--
-#
-#     $ ampy --port /dev/ttyUSB0 put boot_with_wifi.py boot.py
-#     $ screen /dev/ttyUSB0 115200
-#     >>>  <Ctrl+a then Shift+k to exit repl>
-#
+'''
+MicroPython: https://docs.micropython.org/en/latest/
+
+Brandon Gant
+Created: 2019-02-08
+Updated: 2021-11-10
+
+Source: https://github.com/micropython/micropython/tree/master/ports/esp32#configuring-the-wifi-and-using-the-board
+Source: https://boneskull.com/micropython-on-esp32-part-1/
+Source: https://docs.micropython.org/en/latest/library/network.WLAN.html
+
+### Required Files:
+boot.py
+key_store.py
+
+### Optional Files:
+timezone.py
+detect_filesystem.py
+TinyPICO_RGB.py
+
+### Software Installation:
+mkdir ~/micropython-setup
+cd ~/micropython-setup
+
+python3 -m pip install pyvenv
+python3 -m venv micropython-env
+source micropython-env/bin/activate
+python3 -m pip list | egrep -v "Package|----" | awk '{print $1}' | xargs -I {} python3 -m pip install --upgrade {}
+python3 -m pip install esptool
+python3 -m pip install mpremote
+
+wget https://micropython.org/resources/firmware/tinypico-20210902-v1.17.bin
+esptool.py --chip esp32 --port /dev/ttyUSB0 erase_flash
+esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 460800 write_flash -z 0x1000 tinypico-20210902-v1.17.bin
+
+git clone https://github.com/bgant/micropython-wifi
+cd micropython-wifi/
+mpremote cp key_store.py :
+mpremote cp timezone.py :
+mpremote cp TinyPICO_RGB.py :
+mpremote cp boot.py :
+mpremote  <-- to enter REPL
+from machine import reset
+reset()
+<enter your Wifi SSID and Password and make sure it connects>
+<if you made a mistake run import key_store and key_store.init() to change SSID and Password>
+<Ctrl+] to exit REPL>
+'''
 
 print()
 print('=' * 45)
