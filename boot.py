@@ -17,6 +17,7 @@ key_store.py
 timezone.py
 detect_filesystem.py
 TinyPICO_RGB.py
+client_id.py
 
 ### Software Installation:
 mkdir ~/micropython-setup
