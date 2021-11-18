@@ -19,7 +19,7 @@ detect_filesystem.py
 TinyPICO_RGB.py
 client_id.py
 
-### Software Installation:
+### Software Installation on Linux:
 mkdir ~/micropython-setup
 cd ~/micropython-setup
 

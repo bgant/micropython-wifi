@@ -1,27 +1,29 @@
-# MicroPython:          https://docs.micropython.org/en/latest/
-#
-# Brandon Gant
-# Created: 2019-03-28
-# Updated: 2020-09-09
-#
-# Usage:
-#    import key_store
-#    key_store.init()              <-- Creates key_store.db if it does not exist
-#    key_store.set('key','value')  <-- Sets key/value in database
-#    key_store.get('key')          <-- Gets value from database
-#    key_store.delete('key')       <-- Deletes key/value in database
-#    key_store.dumptext()          <-- Prints contents of key_store.db to screen
-#    key_store.dumpfile()          <-- Dumps contents of key_store.db to key_store.txt which ampy can retrieve
-#    key_store.wipe()              <-- Removes key_store.db file
-#
-# This script keeps private settings out of github and also logs everything locally if needed.
-#
-# Timestamps are in Embedded Epoch Time (seconds since 2000-01-01 00:00:00 UTC) as opposed to
-# Unix/POSIX Epoch Time (seconds since 1970-01-01 00:00:00 UTC).
-#
-#    utime.localtime()
-#    utime.localtime(611934744)  <-- Both are in UTC timezone
-#
+'''
+MicroPython:          https://docs.micropython.org/en/latest/
+
+Brandon Gant
+Created: 2019-03-28
+Updated: 2020-09-09
+
+Usage:
+   import key_store
+   key_store.init()              <-- Creates key_store.db if it does not exist
+   key_store.set('key','value')  <-- Sets key/value in database
+   key_store.get('key')          <-- Gets value from database
+   key_store.delete('key')       <-- Deletes key/value in database
+   key_store.dumptext()          <-- Prints contents of key_store.db to screen
+   key_store.dumpfile()          <-- Dumps contents of key_store.db to key_store.txt which ampy can retrieve
+   key_store.wipe()              <-- Removes key_store.db file
+
+This script keeps private settings out of github and also logs everything locally if needed.
+
+Timestamps are in Embedded Epoch Time (seconds since 2000-01-01 00:00:00 UTC) as opposed to
+Unix/POSIX Epoch Time (seconds since 1970-01-01 00:00:00 UTC).
+
+   utime.localtime()
+   utime.localtime(611934744)  <-- Both are in UTC timezone
+
+'''
 
 import btree
 
